@@ -1,0 +1,34 @@
+#Jose's function
+def available_choices(choices, points, history):
+    if points < 0:
+        raise ValueError("Points cannot be negative")
+
+    available = {}
+
+    for choice in choices:
+        required_history, min_points = choices[choice]
+
+        if points >= min_points:
+            allowed = True
+
+            for past_choice in required_history:
+                if past_choice not in history:
+                    allowed = False
+
+            if allowed:
+                available[choice] = choices[choice]
+
+    return available
+
+
+choices = {
+    "Go in cave": ([], 5),
+    "Fight monster": (["Go in cave"], 10),
+    "Open door": (["Find key"], 5),
+    "Run away": ([], 0)
+}
+
+points = 15
+history = ["Go in cave"]
+
+print(available_choices(choices, points, history))
