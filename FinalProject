@@ -1,4 +1,4 @@
-#Jose's function
+# Jose's function
 def available_choices(choices, points, history):
     if points < 0:
         raise ValueError("Points cannot be negative")
@@ -20,15 +20,70 @@ def available_choices(choices, points, history):
 
     return available
 
+# Jacob's function
+def apply_choice(choice, choices, choices_results, points, history):
+    """Apply a choice's effects and updates points and history.
 
+    Args:
+        choice (str): the choice the player picked
+        choices (dict): choice name points to (required history list, min points)
+        choices_results (dict): choice name points to list of (effect type, adder)
+        points (int): player's current points
+        history (list): past choices
+
+    Returns:
+        tuple: (new_history, new_points), or ([], 0) if the player dies (total reset)
+
+    Raises:
+        ValueError: if points are negative or the choice is not available or DNE
+    """
+    if points < 0:
+        raise ValueError("Points cannot be negative")
+    
+    if choice not in choices or choice not in available_choices(choices, points, history) :
+        raise ValueError("This is not a valid choice")
+    
+    new_history = history.copy()
+    new_history.append(choice)
+    new_points = points
+    
+    for type, adder in choices_results[choice]:
+        if type == "points":
+            new_points += adder
+        elif type == "minigame":
+            new_points += run_minigame(adder)
+        if new_points <= 0:
+            return [], 0
+            
+    return(new_history,new_points)
+
+# Filler function for now
+def run_minigame(minigame):
+    if minigame == "dice":
+        return 5
+    if minigame == "beast":
+        return 5
+    return 3
+
+# Test Values
 choices = {
     "Go in cave": ([], 5),
-    "Fight monster": (["Go in cave"], 10),
+    "Talk to the old man": (["Go in cave"], 10),
     "Open door": (["Find key"], 5),
-    "Run away": ([], 0)
+    "Run away": ([], 0),
+    "Wake the beast": (["Go in cave"], 0),
 }
 
+choices_results = {
+    "Go in cave": [("points", 5)],
+    "Talk to the old man": [("minigame", "dice"), ("points", 10)],
+    "Open door": [("points", 5)],
+    "Run away": [("points", -3)],
+    "Wake the beast": [("minigame", "beast"), ("points", 50)],
+}
 points = 15
 history = ["Go in cave"]
 
 print(available_choices(choices, points, history))
+print(apply_choice("Talk to the old man", choices, choices_results, points, history)) 
+print(apply_choice("Run away", choices, choices_results, points, history))               
