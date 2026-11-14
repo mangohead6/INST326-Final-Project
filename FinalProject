@@ -74,6 +74,9 @@ choices = {
     "Wake the beast": (["Go in cave"], 0),
 }
 
+# Created a new choices_results dict which points choices to a list containing tuples of 'type' and 'adders'
+# The two 'types' are add or sutract points 'type' or the minigame 'type' that will run a minigame based off of the choice
+# Added this to add complexity and easily transition the apply_choice function into the minigames function
 choices_results = {
     "Go in cave": [("points", 5)],
     "Talk to the old man": [("minigame", "dice"), ("points", 10)],
