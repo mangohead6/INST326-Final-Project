@@ -57,6 +57,21 @@ def apply_choice(choice, choices, choices_results, points, history):
             
     return(new_history,new_points)
 
+# Josh's Function 
+def correct_choice(choice, history, correct_choice): 
+    if not correct_choice: 
+        raise ValueError("correct_path cannot be empty")
+
+    if len(history) >= len(correct_choice): 
+        return False
+
+    for i in range(len(history)): 
+        if history[i] != correct_choice[i]: 
+            return False 
+
+    return choice == correct_choice[len(history)] 
+
+
 # Filler function for now
 def run_minigame(minigame):
     if minigame == "dice":
@@ -73,6 +88,22 @@ choices = {
     "Run away": ([], 0),
     "Wake the beast": (["Go in cave"], 0),
 }
+
+# Testing Josh's Function 
+# 1st Paragraph: Right Choices 
+# 2nd Paragraph: Wrong Choices 
+correct_path = ["Go in cave", "Talk to the old man", "Open door"]
+
+print(correct_choice("Go in cave", [], correct_path))                                   
+print(correct_choice("Talk to the old man", ["Go in cave"], correct_path))             
+print(correct_choice("Open door", ["Go in cave", "Talk to the old man"], correct_path))  
+
+print(correct_choice("Run away", [], correct_path))                                    
+print(correct_choice("Open door", ["Go in cave"], correct_path))                        
+print(correct_choice("Open door", ["Run away", "Go in cave"], correct_path))            
+
+print(correct_choice("Go in cave", ["Go in cave", "Talk to the old man", "Open door"], correct_path)) 
+
 
 # Created a new choices_results dict which points choices to a list containing tuples of 'type' and 'adders'
 # The two 'types' are add or sutract points 'type' or the minigame 'type' that will run a minigame based off of the choice
